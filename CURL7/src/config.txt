@@ -1,0 +1,3 @@
+-X GET
+-H "Ocp-Apim-Subscription-Key: 7f797abfc83c49aba7458746266abd28"
+url="https://api.fantasydata.net/nfl/v2/xml/PlayerSeasonStats/2015REG"

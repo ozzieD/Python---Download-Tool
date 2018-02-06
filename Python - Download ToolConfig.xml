@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<AlteryxJavaScriptPlugin>
+  <EngineSettings EngineDllEntryPoint="Python - Download Tool\Supporting_Macros\cURLDownloadToolEngine.yxmc" EngineDll="Macro" SDKVersion="10.1"/>
+  <Properties>
+    <MetaInfo>
+      <NameIsFileName value="True"/>
+      <Name>cURLDownloadTool</Name>
+      <Description>Download tool with a cURL backend</Description>
+      <RootToolName>cURLDownloadTool</RootToolName>
+      <ToolVersion>1</ToolVersion>
+      <ToolInDB value="false"/>
+      <CategoryName>Connectors</CategoryName>
+      <SearchTags/>
+      <Author>Ozzie Dembowski</Author>
+      <Company>Alteryx</Company>
+      <Copyright>2017</Copyright>
+      <DescriptionLink actual="" display=""/>
+    </MetaInfo>
+  </Properties>
+  <GuiSettings Help="" Html="cURLDownloadToolGui.html" Icon="cURLDownloadToolIcon.png" SDKVersion="10.1">
+    <InputConnections>
+      <Connection Name="Input" AllowMultiple="False" Optional="True" Type="Connection" Label="I"/>
+    </InputConnections>
+    <OutputConnections>
+      <Connection Name="OutputR" AllowMultiple="False" Optional="False" Type="Connection" Label="R"/>
+      <Connection Name="OutputO" AllowMultiple="False" Optional="False" Type="Connection" Label="O"/>
+      <Connection Name="OutputH" AllowMultiple="False" Optional="False" Type="Connection" Label="H"/>
+    </OutputConnections>
+  </GuiSettings>
+</AlteryxJavaScriptPlugin>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Download Tool V2</title>
+    <script type="text/javascript">
+      // Include version 1 of the base GUI library.
+      document.write('<link rel="import" href="' + window.Alteryx.LibDir + '1/lib/alteryx/gui/includes.html">');
+    </script>
+</head>
+<body>
+
+<!-- Http Action Tab -->
+<fieldset id="HTTP">
+<legend>Http Action</legend>
+
+<label for="HTTPAction">Specify Http Action</label>
+    <alteryx-pluginwidget type="DropDown" id="HTTPAction" dataName="HTTPAction">
+      <alteryx-option uiobject="GET">GET</alteryx-option>
+      <alteryx-option uiobject="POST">POST</alteryx-option>
+      <alteryx-option uiobject="PUT">PUT</alteryx-option>
+      <alteryx-option uiobject="DELETE">DELETE</alteryx-option>
+    </alteryx-pluginwidget>
+
+<!-- <alteryx-pluginwidget value="Input URL From Field" type="RadioButton" group="URL" id="URLField" dataName="URLField">
+</alteryx-pluginwidget> -->
+<alteryx-pluginwidget data-props='{value:"URLFieldTrue",type:"RadioButton",group:"URL",id:"URLField",dataName:"URLField"}'>
+</alteryx-pluginwidget>
+
+<label for="SelectURL">Select Field with URL</label>
+      <alteryx-pluginwidget type="DropDown" dataType="FieldSelector" id="URLDrop" dataName="URLDrop"
+                            inputNumber="0" connectionNumber="0" fieldType="String" clearable="true">
+      </alteryx-pluginwidget>
+
+<!-- <alteryx-pluginwidget value="Input URL Manually" type="RadioButton" group="URL" id="URLMan" dataName="URLMan">
+</alteryx-pluginwidget> -->
+
+<label for="URLText">Enter URL</label>
+<alteryx-pluginwidget type="TextBox" id="URLText" dataName="URLText"></alteryx-pluginwidget>
+</fieldset>
+
+<!-- Headers -->
+
+<!-- <fieldset id="Headers">
+<alteryx-pluginwidget value="No Header" type="RadioButton" group="Headers" id="NoHeaders" dataName="NoHeaders">
+</alteryx-pluginwidget>
+
+
+<alteryx-pluginwidget value="Input Headers from Fields" type="RadioButton" group="Headers" id="HeaderFields" dataName="HeaderFields">
+</alteryx-pluginwidget>
+
+<label>Select Header Fields</label>
+      <alteryx-pluginwidget type="MultiSelectListBox" dataType="MultiStringSelector" id="HeaderListBox" dataName="HeaderListBox" showsearchrow="true">
+      </alteryx-pluginwidget>
+
+<alteryx-pluginwidget value="Input Headers Manually" type="RadioButton" group="Headers" id="HeaderMan" dataName="HeaderMan">
+</alteryx-pluginwidget>
+
+<label>Enter Headers (Name: Value) line by line:</label>
+  <alteryx-pluginwidget type="TextArea" rows="5" dataName="Headertextbox"></alteryx-pluginwidget>
+
+</fieldset> -->
+
+<!-- Payload -->
+
+<!-- <fieldset id="Payload">
+
+  <alteryx-pluginwidget value="No Payload" type="RadioButton" group="Payload" id="NoPayload" dataName="NoPayload">
+  </alteryx-pluginwidget>
+
+
+  <alteryx-pluginwidget value="Input Payload From Field String" type="RadioButton" group="Payload" id="PayloadField" dataName="PayloadField">
+  </alteryx-pluginwidget>
+
+  <label>Select Header Fields</label>
+    <alteryx-pluginwidget type="Dropdown" dataType="FieldSelector" id="PayloadDrop" dataName="PayloadDrop">
+    </alteryx-pluginwidget>
+
+  <alteryx-pluginwidget value="Input Payload Manually" type="RadioButton" group="Payload" id="PayloadMan" dataName="PayloadMan">
+  </alteryx-pluginwidget>
+
+  <label>Enter Payload String</label>
+    <alteryx-pluginwidget type="TextArea" rows="10" dataName="Payloadtextbox"></alteryx-pluginwidget>
+
+</fieldset> -->
+
+<!-- Credentials -->
+<!-- <alteryx-pluginwidget value="No Credentials" type="RadioButton" group="Credentials" id="NoCredentials" dataName="NoCredentials">
+</alteryx-pluginwidget>
+
+<alteryx-pluginwidget value="Input Credentials From Fields" type="RadioButton" group="Credentials" id="CredFields" dataName="CredFields">
+</alteryx-pluginwidget>
+
+<label>Select Username Field</label>
+  <alteryx-pluginwidget type="Dropdown" dataType="FieldSelector" id="UserDrop" dataName="UserDrop">
+  </alteryx-pluginwidget>
+
+<label>Select Password Field</label>
+  <alteryx-pluginwidget type="Dropdown" dataType="FieldSelector" id="PassDrop" dataName="PassDrop">
+  </alteryx-pluginwidget>
+
+<alteryx-pluginwidget value="Input Credentials Manually" type="RadioButton" group="Credentials" id="CredMan" dataName="CredMan">
+</alteryx-pluginwidget>
+
+<label>Enter Username/label>
+<alteryx-pluginwidget type="TextBox" id="UserText" dataName="UserText"></alteryx-pluginwidget>
+
+<label>Enter Password</label>
+<alteryx-pluginwidget type="TextBox" id="PassText" dataName="PassText"></alteryx-pluginwidget>
+
+<alteryx-pluginwidget value="Use Windows Auth" type="RadioButton" group="Credentials" id="CredWin" dataName="CredWin">
+</alteryx-pluginwidget> -->
+  <script> </script>
+</body>
+</html>

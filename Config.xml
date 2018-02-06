@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AlteryxJavaScriptPlugin>
+  <Properties>
+    <MetaInfo>
+      <Name>Python - Download Tool</Name>
+      <Description>A Download tool created using the HTML GUI and Python SDKs</Description>
+      <ToolVersion>1</ToolVersion>
+      <CategoryName>Connectors</CategoryName>
+      <Author>Ozzie Dembowski</Author>
+      <Icon>Python - Download ToolIcon.png</Icon>
+    </MetaInfo>
+  </Properties>
+</AlteryxJavaScriptPlugin>

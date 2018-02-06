@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <title>Download Tool V2</title>
+    <script type='text/javascript'>
+      // // Include version 1 of the base GUI library.
+      // document.write('<link rel="import" href="' + window.Alteryx.LibDir + '1/lib/alteryx/gui/includes.html">');
+      // Include version 2 of the base GUI library.
+      document.write('<link rel="import" href="' + window.Alteryx.LibDir + '2/lib/includes.html">');
+    </script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <link rel='stylesheet' href='./assets/styles.css'>
+</head>
+<body>
+
+  <!-- Http Action Page -->
+
+    <fieldset id='HTTP'>
+      <legend>HTTP Action</legend>
+      <label>Specify HTTP Action</label>
+      <ayx data-ui-props = '{type: "DropDown", widgetId: "HTTPAction"}' data-item-props = '{dataName: "HTTPAction", optionList: [
+        {label: "GET", value: "get"},
+        {label: "POST", value: "post"},
+        {label: "PUT", value: "put"},
+        {label: "DELETE", value: "delete"}
+        ]}'>
+      </ayx>
+      <ayx data-ui-props= '{option: {label: "Input URL from a Field", value: "URLField"}, type: "RadioButton", widgetId: "RadioURLDrop"}' data-item-props = '{dataName:"radioURL"}'>
+        <div id='urlDrop'>
+          <ayx data-ui-props = '{type: "DropDown", widgetId: "URLDrop"}' data-item-props = '{dataName: "URLDrop", dataType: "FieldSelector"}'></ayx>
+        </div>
+      </ayx>
+      <ayx data-ui-props= '{option: {label: "Enter URL Manually", value: "URLMan"}, type: "RadioButton", widgetId: "RadioURLText"}' data-item-props = '{dataName:"radioURL"}'>
+        <div id='urlText'>
+          <ayx data-ui-props='{type:"TextBox", widgetId:"URLText"}'  data-item-props = '{dataName: "URLText"}'></ayx>
+        </div>
+      </ayx>
+      <div class='footer_spacer'></div>
+      <div class='footer'>
+        <hr>
+        <div style='margin-top: 8px;margin-bottom: 8px;'>
+          <!-- <ayx data-ui-props='{type:"Button", widgetId:"buttonPrimary", label:"Next", onClick:setPage("#Headers"), category:"primary"}'></ayx> -->
+          <button type='submit' class='nextBtn' id='headersNextBtn' onclick='setPage("#Headers")'>XMSG("Next")</button>
+        </div>
+        <br>
+        <br>
+    </fieldset>
+
+<!-- Headers -->
+
+    <fieldset id='Headers' style='display:none;'>
+      <legend>Headers</legend>
+      <ayx data-ui-props= '{option: {label: "No Headers", value: "noHeaders"}, type: "RadioButton", widgetId: "radioHeaderNo"}' data-item-props = '{dataName:"radioHeaders"}'></ayx>
+      <ayx data-ui-props= '{option: {label: "Input Headers from Fields", value: "headerFields"}, type: "RadioButton", widgetId: "radioHeaderFields"}' data-item-props = '{dataName:"radioHeaders"}'>
+        <div id='headerListbox' style='margin-left: 28px'>
+          <ayx data-ui-props='{type:"ListBox", widgetId:"headerFieldsList"}' data-item-props = '{dataName: "headerFieldsList", dataType: "FieldSelectorMulti"}'></ayx>
+        </div>
+      </ayx>
+      <ayx data-ui-props= '{option: {label: "Input Headers Manually", value: "headersMan"}, type: "RadioButton", widgetId: "radioHeaderMan"}' data-item-props = '{dataName:"radioHeaders"}'>
+        <div id='headersText' style='margin-left: 28px'>
+          <label>Enter Headers (Name: Value) line by line:</label>
+          <ayx data-ui-props='{type:"TextArea", widgetId:"headersText", rows:5}' data-item-props = '{dataName: "headersText"}'></ayx>
+        </div>
+      </ayx>
+      <div class='footer_spacer'></div>
+      <div class='footer'>
+          <hr>
+          <div style='margin-top: 8px;margin-bottom: 8px;'>
+              <!-- Add id name and onclick function during process story -->
+              <!-- <ayx data-ui-props='{type:"Button", widgetId:"buttonPrimary", label:"XMSG("Save")", onClick:buttonClicked, category:"primary"}'></ayx> -->
+
+              <button type='submit' class='nextBtn' id='payloadNextBtn' onclick='setPage("#Payload")'>XMSG("Next")</button>
+              <button class='prevBtn' id='HTTPPrevBtn' onclick='setPage("#HTTP")'>XMSG("Previous")</button>
+          </div>
+          <br>
+          <br>
+      </div>
+    </fieldset>
+
+<!-- Payload -->
+
+    <fieldset id='Payload' style='display:none;'>
+      <legend>Payload</legend>
+      <ayx data-ui-props= '{option: {label: "No Payload", value: "noPayload"}, type: "RadioButton", widgetId: "radioPayloadNo"}' data-item-props = '{dataName:"radioPayload"}'></ayx>
+      <ayx data-ui-props= '{option: {label: "Input Payload from Field", value: "payloadField"}, type: "RadioButton", widgetId: "radioPayloadField"}' data-item-props = '{dataName:"radioPayload"}'>
+        <div id='payloadListbox' style='margin-left: 28px'>
+          <label>Select Payload Fields</label>
+          <ayx data-ui-props='{type:"ListBox", widgetId:"payloadFieldDrop"}' data-item-props = '{dataName: "payloadFieldDrop", dataType: "FieldSelectorMulti"}'></ayx>
+        </div>
+      </ayx>
+      <ayx data-ui-props= '{option: {label: "Input Payload Manually", value: "payloadMan"}, type: "RadioButton", widgetId: "radioPayloadMan"}' data-item-props = '{dataName:"radioPayload"}'>
+        <div id='payloadText' style='margin-left: 28px'>
+          <label>Enter Payload String</label>
+          <ayx data-ui-props='{type: "TextArea", widgetId: "payloadText", rows:10}' data-item-props = '{dataName: "payloadText"}'> </ayx>
+        </div>
+      </ayx>
+      <div class='footer_spacer'></div>
+      <div class='footer'>
+          <hr>
+          <div style='margin-top: 8px;margin-bottom: 8px;'>
+              <!-- Add id name and onclick function during process story -->
+              <button type='submit' class='nextBtn' id='credentialsNextBtn' onclick='setPage("#Credentials")'>XMSG("Next")</button>
+              <button class='prevBtn' id='headersPrevBtn' onclick='setPage("#Headers")'>XMSG("Previous")</button>
+          </div>
+          <br>
+          <br>
+      </div>
+    </fieldset>
+
+<!-- Credentials -->
+
+    <fieldset id='Credentials' style='display:none;'>
+      <legend>Credentials</legend>
+      <ayx data-ui-props= '{option: {label: "No Credentials", value: "noCredentials"}, type: "RadioButton", widgetId: "radioCredentialsNo"}' data-item-props = '{dataName:"radioCredentials"}'></ayx>
+      <ayx data-ui-props= '{option: {label: "Input Credentials from Field", value: "credentialsField"}, type: "RadioButton", widgetId: "radioCredentialsField"}' data-item-props = '{dataName:"radioCredentials"}'>
+        <div id='credentialsDropdowns' style='margin-left: 28px'>
+          <label>Select Username Field</label>
+          <ayx data-ui-props = '{type: "DropDown", widgetId: "UserDrop"}' data-item-props = '{dataName: "UserDrop", dataType: "FieldSelector", fieldType: "String", clearable: true}'></ayx>
+          <label>Select Password Field</label>
+          <ayx data-ui-props = '{type: "DropDown", widgetId: "PassDrop"}' data-item-props = '{dataName: "PassDrop", dataType: "FieldSelector", fieldType: "String", clearable: true}'></ayx>
+        </div>
+      </ayx>
+      <ayx data-ui-props= '{option: {label: "Input Credentials Manually", value: "credentialsMan"}, type: "RadioButton", widgetId: "radioCredentialsMan"}' data-item-props = '{dataName:"radioCredentials"}'>
+        <div id='credentialsTextboxes' style='margin-left: 28px'>
+          <label>Enter Username</label>
+          <ayx data-ui-props='{type:"TextBox", widgetId:"UserText"}' data-item-props = '{dataName: "UserText"}'></ayx>
+          <label>Enter Password</label>
+          <ayx data-ui-props='{type:"TextBox", widgetId:"PassText"}' data-item-props = '{dataName: "PassText", password: true}'></ayx>
+        </div>
+      </ayx>
+      <ayx data-ui-props= '{option: {label: "Use Windows Authentication", value: "credentialsWinAuth"}, type: "RadioButton", widgetId: "radioCredentialsWinAuth"}' data-item-props = '{dataName:"radioCredentials"}'></ayx>
+      <div class='footer_spacer'></div>
+      <div class='footer'>
+          <hr>
+          <div style='margin-top: 8px;margin-bottom: 8px;'>
+              <!-- Add id name and onclick function during process story -->
+              <button type='submit' class='nextBtn' id='metricsNextBtn' onclick='setPage("#AdditionalOptions")'>XMSG("Next")</button>
+              <button class='prevBtn' id='metricsPrevBtn' onclick='setPage("#Payload")'>XMSG("Previous")</button>
+          </div>
+          <br>
+          <br>
+      </div>
+    </fieldset>
+
+    <!-- Additional Options -->
+
+    <fieldset id='AdditionalOptions' style='display:none;'>
+      <legend>Additional Options</legend>
+      <label>Advanced Options</label>
+      <br>
+      <br>
+      <br>
+
+      <label>Request Preview</label>
+      <ayx data-ui-props='{type: "TextArea", widgetId: "previewText", rows:10}' data-item-props = '{dataName: "previewText"}'> </ayx>
+      <div class="postman-run-button"
+      data-postman-action="collection/import"
+      data-postman-var-1="ef83a526434ba77779f3"></div>
+      <script type='text/javascript'>
+        (function (p,o,s,t,m,a,n) {
+          !p[s] && (p[s] = function () { (p[t] || (p[t] = [])).push(arguments); });
+          !o.getElementById(s+t) && o.getElementsByTagName('head')[0].appendChild((
+            (n = o.createElement('script')),
+            (n.id = s+t), (n.async = 1), (n.src = m), n
+          ));
+        }(window, document, '_pm', 'PostmanRunObject', 'https://run.pstmn.io/button.js'));
+      </script>
+      <div class='footer_spacer'></div>
+      <div class='footer'>
+          <hr>
+          <div style='margin-top: 8px;margin-bottom: 8px;'>
+              <!-- Add id name and onclick function during process story -->
+              <button class='prevBtn' id='metricsPrevBtn' onclick='setPage("#Credentials")'>XMSG("Previous")</button>
+          </div>
+          <br>
+          <br>
+      </div>
+      </fieldset>
+</body>
+<!-- <script type="text/javascript" src=bundle.js>
+</script> -->
+<script>
+
+Alteryx.Gui.BeforeLoad = (manager, AlteryxDataItems, json) => {
+  // Setting up simplebool dataItems that will match up with the macro's radio buttons
+
+  //Radio buttons for URL________________________________________________________________________
+  const radioURLdataItemUpdater = (e) => {
+    radioURLField.setValue(e.value === 'URLField')
+    radioURLMan.setValue(e.value === 'URLMan')
+    }
+
+  manager.getDataItem("radioURL").setSuppressed(true)
+  manager.getDataItem("radioURL").registerPropertyListener("value", radioURLdataItemUpdater)
+
+  const radioURLMan = new AlteryxDataItems.SimpleBool('radioURLMan')
+  manager.addDataItem(radioURLMan)
+
+  const radioURLField = new AlteryxDataItems.SimpleBool('radioURLField')
+  manager.addDataItem(radioURLField)
+
+  //Radio buttons for Headers_______________________________________________________________________
+  const radioHeadersdataItemUpdater = (e) => {
+    radioHeadersNo.setValue(e.value === 'noHeaders')
+    radioHeaderFields.setValue(e.value === 'headerFields')
+    radioHeadersMan.setValue(e.value === 'headersMan')
+    }
+
+  manager.getDataItem("radioHeaders").setSuppressed(true)
+  manager.getDataItem("radioHeaders").registerPropertyListener("value", radioHeadersdataItemUpdater)
+
+  const radioHeadersNo = new AlteryxDataItems.SimpleBool('radioHeadersNo')
+  manager.addDataItem(radioHeadersNo)
+
+  const radioHeaderFields = new AlteryxDataItems.SimpleBool('radioHeaderFields')
+  manager.addDataItem(radioHeaderFields)
+
+  const radioHeadersMan = new AlteryxDataItems.SimpleBool('radioHeadersMan')
+  manager.addDataItem(radioHeadersMan)
+
+  //Radio buttons for Payload_______________________________________________________________________________
+  const radioPayloaddataItemUpdater = (e) => {
+    radioPayloadNo.setValue(e.value === 'noPayload')
+    radioPayloadField.setValue(e.value === 'payloadField')
+    radioPayloadMan.setValue(e.value === 'payloadMan')
+    }
+
+  manager.getDataItem("radioPayload").setSuppressed(true)
+  manager.getDataItem("radioPayload").registerPropertyListener("value", radioPayloaddataItemUpdater)
+
+  const radioPayloadNo = new AlteryxDataItems.SimpleBool('radioPayloadNo')
+  manager.addDataItem(radioPayloadNo)
+
+  const radioPayloadField = new AlteryxDataItems.SimpleBool('radioPayloadField')
+  manager.addDataItem(radioPayloadField)
+
+  const radioPayloadMan = new AlteryxDataItems.SimpleBool('radioPayloadMan')
+  manager.addDataItem(radioPayloadMan)
+
+  //Radio buttons for Credentials_______________________________________________________________________________
+  const radioCredentialsdataItemUpdater = (e) => {
+    radioCredentialsNo.setValue(e.value === 'noCredentials')
+    radioCredentialsField.setValue(e.value === 'credentialsField')
+    radioCredentialsMan.setValue(e.value === 'credentialsMan')
+    radioCredentialsWinAuth.setValue(e.value === 'credentialsWinAuth')
+    }
+
+  manager.getDataItem("radioCredentials").setSuppressed(true)
+  manager.getDataItem("radioCredentials").registerPropertyListener("value", radioCredentialsdataItemUpdater)
+
+  const radioCredentialsNo = new AlteryxDataItems.SimpleBool('radioCredentialsNo')
+  manager.addDataItem(radioCredentialsNo)
+
+  const radioCredentialsField = new AlteryxDataItems.SimpleBool('radioCredentialsField')
+  manager.addDataItem(radioCredentialsField)
+
+  const radioCredentialsMan = new AlteryxDataItems.SimpleBool('radioCredentialsMan')
+  manager.addDataItem(radioCredentialsMan)
+
+  const radioCredentialsWinAuth = new AlteryxDataItems.SimpleBool('radioCredentialsWinAuth')
+  manager.addDataItem(radioCredentialsWinAuth)
+
+}
+
+Alteryx.Gui.AfterLoad = (manager) => {
+
+  // Get radio group configs
+  const radioURL = manager.getDataItem('radioURL').getValue()
+  const radioHeaders = manager.getDataItem('radioHeaders').getValue()
+  const radioPayload = manager.getDataItem('radioPayload').getValue()
+  const radioCredentials = manager.getDataItem('radioCredentials').getValue()
+
+  // Set default buttons if none are selected
+  if (radioURL == "") {
+    manager.getDataItem('radioURL').setValue("URLField")
+  }
+
+  if (radioHeaders == "") {
+    manager.getDataItem('radioHeaders').setValue("noHeaders")
+  }
+
+  if (radioPayload == "") {
+    manager.getDataItem('radioPayload').setValue("noPayload")
+  }
+
+  if (radioCredentials == "") {
+    manager.getDataItem('radioCredentials').setValue("noCredentials")
+  }
+
+  console.log('SharedButtons',radioURL, radioHeaders, radioPayload, radioCredentials)
+
+// // Match up newly created dataItems to what we should see in the GUI
+//   // Radio Buttons for URLs
+//   if (manager.getDataItem("radioURLField").getValue() == true) {
+//     manager.getDataItem("radioURL").setValue("URLField")
+//     } else {
+//       manager.getDataItem("radioURL").setValue("URLMan")
+//     }
+//
+//   // Radio Buttons for Headers
+//   if (manager.getDataItem("radioHeadersNo").getValue() == true) {
+//     manager.getDataItem("radioHeaders").setValue("headersNo")
+//   } else if (manager.getDataItem("radioHeaderFields").getValue() == true) {
+//     manager.getDataItem("radioHeaders").setValue("headerFields")
+//   } else {
+//     manager.getDataItem("radioHeaders").setValue("headersMan")
+//     }
+//
+//   // Radio Buttons for Payload
+//   if (manager.getDataItem("radioPayloadNo").getValue() == true) {
+//     manager.getDataItem("radioPayload").setValue("payloadNo")
+//   } else if (manager.getDataItem("radioHeaderFields").getValue() == true) {
+//     manager.getDataItem("radioPayload").setValue("payloadField")
+//   } else {
+//     manager.getDataItem("radioPayload").setValue("payloadMan")
+//     }
+//
+//   // Radio Buttons for Credentials
+//   if (manager.getDataItem("radioCredentialsNo").getValue() == true) {
+//     manager.getDataItem("radioCredentials").setValue("credentialsNo")
+//   } else if (manager.getDataItem("radioHeaderFields").getValue() == true) {
+//     manager.getDataItem("radioCredentials").setValue("credentialsField")
+//   } else if (manager.getDataItem("radioHeaderMan").getValue() == true) {
+//     manager.getDataItem("radioCredentials").setValue("credentialsMan")
+//   } else {
+//     manager.getDataItem("radioCredentials").setValue("credentialsWinAuth")
+//   }
+}
+
+const setPage = (fieldsetName) => {
+  // Array containing all fieldsets
+  let hideArray = [
+    '#HTTP',
+    '#Headers',
+    '#Payload',
+    '#Credentials',
+    '#AdditionalOptions'
+  ]
+
+  let showArray = []
+
+  showArray.push(fieldsetName)
+
+  $(document).ready(() => {
+    // Hide each item in the hideArray
+    hideArray.forEach((v) => {
+      $(v).hide()
+    })
+    // Show the fieldset corresponding with fieldsetName
+    showArray.forEach((v) => {
+      $(v).show()
+    })
+  })
+}
+</script>
+</html>
