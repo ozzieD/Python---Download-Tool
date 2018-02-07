@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <AlteryxJavaScriptPlugin>
-  <EngineSettings EngineDllEntryPoint="Python - Download Tool\Supporting_Macros\cURLDownloadToolEngine.yxmc" EngineDll="Macro" SDKVersion="10.1"/>
+  <EngineSettings EngineDll="Python" EngineDllEntryPoint="Python - Download ToolEngine.py" SDKVersion="10.1" />
   <Properties>
     <MetaInfo>
       <NameIsFileName value="True"/>
-      <Name>cURLDownloadTool</Name>
-      <Description>Download tool with a cURL backend</Description>
-      <RootToolName>cURLDownloadTool</RootToolName>
+      <Name>Python - Download Tool</Name>
+      <Description>A Download tool created using the HTML GUI and Python SDKs</Description>
+      <RootToolName>Python - Download Tool</RootToolName>
       <ToolVersion>1</ToolVersion>
       <ToolInDB value="false"/>
       <CategoryName>Connectors</CategoryName>
@@ -17,14 +17,14 @@
       <DescriptionLink actual="" display=""/>
     </MetaInfo>
   </Properties>
-  <GuiSettings Help="" Html="cURLDownloadToolGui.html" Icon="cURLDownloadToolIcon.png" SDKVersion="10.1">
+  <GuiSettings Help="" Html="Python - Download ToolGui.html" Icon="Python - Download ToolIcon.png" SDKVersion="10.1">
     <InputConnections>
       <Connection Name="Input" AllowMultiple="False" Optional="True" Type="Connection" Label="I"/>
     </InputConnections>
     <OutputConnections>
-      <Connection Name="OutputR" AllowMultiple="False" Optional="False" Type="Connection" Label="R"/>
-      <Connection Name="OutputO" AllowMultiple="False" Optional="False" Type="Connection" Label="O"/>
-      <Connection Name="OutputH" AllowMultiple="False" Optional="False" Type="Connection" Label="H"/>
+      <Connection Name="Request" AllowMultiple="False" Optional="False" Type="Connection" Label="R"/>
+      <Connection Name="OutputData" AllowMultiple="False" Optional="False" Type="Connection" Label="O"/>
+      <Connection Name="Headers" AllowMultiple="False" Optional="False" Type="Connection" Label="H"/>
     </OutputConnections>
   </GuiSettings>
 </AlteryxJavaScriptPlugin>
