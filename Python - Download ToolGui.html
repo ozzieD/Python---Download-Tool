@@ -267,6 +267,7 @@ Alteryx.Gui.AfterLoad = (manager) => {
 
   // Get radio group configs
   const radioURL = manager.getDataItem('radioURL').getValue()
+  console.log(radioURL == "")
   const radioHeaders = manager.getDataItem('radioHeaders').getValue()
   const radioPayload = manager.getDataItem('radioPayload').getValue()
   const radioCredentials = manager.getDataItem('radioCredentials').getValue()

@@ -5,6 +5,7 @@ Although defining IncomingInterface is optional, the interface methods are neede
 
 import AlteryxPythonSDK as Sdk
 import xml.etree.ElementTree as Et
+import requests
 
 
 class AyxPlugin:
@@ -34,18 +35,21 @@ class AyxPlugin:
         self.url_manual = None
 
         # Headers Page
+        self.radio_headers_no = None
         self.radio_headers_man = None
         self.radio_headers_field = None
         self.headers_field = None
         self.headers_manual = None
 
         # Payload Page
+        self.radio_payload_no = None
         self.radio_payload_man = None
         self.radio_payload_field = None
         self.payload_field = None
         self.payload_manual = None
 
         # Credentials Page
+        self.radio_credentials_no = None
         self.radio_credentials_man = None
         self.radio_credentials_field = None
         self.radio_credentials_winauth = None
@@ -60,6 +64,9 @@ class AyxPlugin:
         self.request_output_anchor = None
         self.outputdata_output_anchor = None
         self.headers_output_anchor = None
+
+        # Input anchor
+        self.single_input = None
 
     def pi_init(self, str_xml: str):
         """
@@ -84,6 +91,7 @@ class AyxPlugin:
               self.url_manual)
 
         # Headers
+        self.radio_headers_no = Et.fromstring(str_xml).find('radioHeadersNo').text if 'radioHeadersNo' in str_xml else None
         self.radio_headers_man = Et.fromstring(str_xml).find('radioHeadersMan').text if 'radioHeadersMan' in str_xml else None
         self.radio_headers_field = Et.fromstring(str_xml).find('radioHeadersField').text if 'radioHeadersField' in str_xml else None
         self.headers_field = Et.fromstring(str_xml).find('headerFieldsList').text if 'headerFieldsList' in str_xml else None
@@ -96,6 +104,7 @@ class AyxPlugin:
               self.headers_manual)
 
         # Payload
+        self.radio_payload_no = Et.fromstring(str_xml).find('radioPayloadNo').text if 'radioPayloadNo' in str_xml else None
         self.radio_payload_man = Et.fromstring(str_xml).find('radioPayloadMan').text if 'radioPayloadMan' in str_xml else None
         self.radio_payload_field = Et.fromstring(str_xml).find('radioPayloadField').text if 'radioPayloadField' in str_xml else None
         self.payload_field = Et.fromstring(str_xml).find('payloadFieldDrop').text if 'payloadFieldDrop' in str_xml else None
@@ -108,6 +117,7 @@ class AyxPlugin:
               self.payload_manual)
 
         # Credentials
+        self.radio_credentials_no = Et.fromstring(str_xml).find('radioCredentialsNo').text if 'radioCredentialsNo' in str_xml else None
         self.radio_credentials_man = Et.fromstring(str_xml).find('radioCredentialsMan').text if 'radioCredentialsMan' in str_xml else None
         self.radio_credentials_field = Et.fromstring(str_xml).find('radioCredentialsField').text if 'radioCredentialsField' in str_xml else None
         self.radio_credentials_winauth = Et.fromstring(str_xml).find('radioCredentialsWinAuth').text if 'radioCredentialsWinAuth' in str_xml else None
@@ -138,7 +148,6 @@ class AyxPlugin:
         :return: The IncomingInterface object(s).
         """
 
-        self.alteryx_engine.pre_sort(str_type, str_name, self.xml_sort_info)
         self.single_input = IncomingInterface(self)
         return self.single_input
 
@@ -157,8 +166,28 @@ class AyxPlugin:
         :param n_record_limit: Set it to <0 for no limit, 0 for no records, and >0 to specify the number of records.
         :return: True for success, False for failure.
         """
+        #
+        # print(type(self.radio_URL_man), type(self.url_manual))
+        # print(bool(self.url_manual))
 
-        self.alteryx_engine.output_message(self.n_tool_id, Sdk.EngineMessageType.error, self.xmsg('Missing Incoming Connection.'))
+        if self.radio_URL_field == 'True' and not bool(self.url_field):
+            self.alteryx_engine.output_message(self.n_tool_id, Sdk.EngineMessageType.error, self.xmsg('Missing URL. Please Enter a URL!'))
+            print('Field conditional')
+
+        if self.radio_URL_man == 'True' and not bool(self.url_manual):
+            print(bool(self.url_manual))
+            self.alteryx_engine.output_message(self.n_tool_id, Sdk.EngineMessageType.error, self.xmsg('Missing URL. Please Enter a URL!'))
+            print('Manual conditional')
+
+        self.record_info_out_all = self.build_record_info_out()
+
+        self.request_output_anchor.init(self.record_info_out_all[0])
+        self.outputdata_output_anchor.init(self.record_info_out_all[1])
+        self.headers_output_anchor.init(self.record_info_out_all[2])
+
+        self.downloaded_data = self.get_download_data()
+
+
         return False
 
     def pi_close(self, b_has_errors: bool):
@@ -166,25 +195,7 @@ class AyxPlugin:
         Called after all records have been processed.
         :param b_has_errors: Set to true to not do the final processing.
         """
-
-        # Check to see that the output anchors are closed.
-        self.unique_output_anchor.assert_close()
-        self.dupe_output_anchor.assert_close()
-
-    def build_sort_info(self, element: str, subelement: property, order: str):
-        """
-        A non-interface method responsible for building out the proper XML string format for pre_sort.
-        :param element: SortInfo or FieldFilterList
-        :param subelement: The user selected field
-        :param order: Asc or Desc
-        """
-
-        # Building the XML string to pass as an argument to pre_sort's sort info parameter.
-        root = Et.Element(element)
-        sub_element = 'Field field="{0}" order="{1}"' if order != "" else 'Field field="{0}"'
-        Et.SubElement(root, sub_element.format(subelement, order))
-        xml_string = Et.tostring(root, encoding='utf8', method='xml')
-        self.xml_sort_info += xml_string.decode('utf8').replace("<?xml version='1.0' encoding='utf8'?>\n", "")
+        pass
 
     def xmsg(self, msg_string: str):
         """
@@ -195,6 +206,57 @@ class AyxPlugin:
 
         return msg_string
 
+    def build_record_info_out(self):
+        """
+        A non-interface helper for pi_push_all_records() responsible for creating the outgoing record layout.
+        :return: The outgoing record layout, otherwise nothing.
+        """
+
+        record_info_out_request = Sdk.RecordInfo(self.alteryx_engine)
+        record_info_out_outputdata = Sdk.RecordInfo(self.alteryx_engine)
+        record_info_out_headers = Sdk.RecordInfo(self.alteryx_engine)
+
+        record_info_out_request.add_field('Request', Sdk.FieldType.v_wstring, 999999)
+        record_info_out_outputdata.add_field('Output Data', Sdk.FieldType.v_wstring, 999999)
+        record_info_out_headers.add_field('Headers', Sdk.FieldType.v_wstring, 999999)
+
+        return [record_info_out_request, record_info_out_outputdata, record_info_out_headers]
+
+
+    def get_download_data(self): # May turn into a class
+        if self.radio_URL_field == 'True':
+            url = self.url_field # TODO figure out field extraction for Incoming interface object
+        else:
+            url = self.url_manual
+
+        if self.radio_headers_field == 'True':
+            headers = self.headers_field # TODO figure out field extraction for Incoming interface object
+        elif self.headers_manual == 'True':
+            headers = self.headers_manual
+        else:
+            headers = None
+
+        if self.radio_payload_field == 'True':
+            payload = self.payload_field  # TODO figure out field extraction for Incoming interface object
+        elif self.payload_manual == 'True':
+            payload = self.payload_manual
+        else:
+            payload = None
+
+        if self.radio_credentials_field == 'True':
+            username = self.username_field # TODO figure out field extraction for Incoming interface object
+            password = self.password_field
+        elif self.radio_credentials_man == 'True':
+            username = self.username_manual
+            password = self.password_manual
+        elif self.radio_credentials_winauth == 'True': # TODO do somthing with this
+            test = 'Something'
+        else:
+            username = None
+            password =None
+
+        # TODO: Advanced Options
+        pass
 
 class IncomingInterface:
     """
@@ -215,10 +277,6 @@ class IncomingInterface:
         # Custom properties
         self.record_info_in = None
         self.record_info_out = None
-        self.target_field = None
-        self.previous_value = None
-        self.records_unique = 0
-        self.records_dupe = 0
 
     def ii_init(self, record_info_in: object) -> bool:
         """
